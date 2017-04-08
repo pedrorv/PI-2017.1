@@ -17,7 +17,6 @@ def track_cat(minimum_area,frame_size):
         #pega o frame atual e inicializa
         (grabbed,frame) = camera.read() #camera.read retorna uma tupla2 , o primeiro valro
         #indica se o frame foi lido com sucesso do buffer, o segundo valor eh o proprio frame
-        text = "Unoccupied"#essa variavel indica se ha movimento ou nao,a principio nao ha
 
         if not grabbed:
             print("deu ruim na recepcao da imagem")
