@@ -3,14 +3,21 @@ import datetime
 import imutils
 import time
 import cv2
+from move_laser import move_laser
 
-def track_cat(minimum_area,frame_size):
+def track_cat(minimum_area,frame_size,step_size):
 #criando o programa e a recepcao de argumentos
 #se nao recebe video, vamo usar a webcam
     camera = cv2.VideoCapture(0)
     #time.sleep(0.25)
     firstFrame = None
 
+    (grabbed,frame) = camera.read()
+    frame = imutils.resize(frame,width=frame_size)
+    height, width, channels = frame.shape
+
+    current_position_X = width/2 #laser comeca no centro
+    current_position_Y = height/2 #laser comeca no centro
     #repete o seguinte loop para cada frame do video
 
     while True:
@@ -60,7 +67,10 @@ def track_cat(minimum_area,frame_size):
 
                     (x,y,w,h) = cv2.boundingRect(c)
                     cv2.rectangle(frame,(x,y),(x + w , y + h),(0,255,0),2)
-                    cv2.circle(frame,(x + w/2 ,y - 20 ),2,(0,0,255),2)
+                    target_position_X = x + w/2
+                    target_position_Y = y - 20
+                    (aux,current_position_X,current_position_Y) = move_laser(current_position_X,current_position_Y,target_position_X,target_position_Y,step_size)
+                    cv2.circle(frame,(current_position_X ,current_position_Y),2,(0,0,255),2)
 
         cv2.imshow("camera", frame)
         cv2.imshow("diferencas", thresh)

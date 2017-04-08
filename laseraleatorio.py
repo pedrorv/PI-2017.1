@@ -3,6 +3,7 @@ import time
 import cv2
 from numpy import linalg as LA
 from random import randint
+from move_laser import move_laser
 
 def random_position(frame_size,step_size):
     camera = cv2.VideoCapture(0)
@@ -17,8 +18,7 @@ def random_position(frame_size,step_size):
 
     current_position_X = width/2 #laser comeca no centro
     current_position_Y = height/2 #laser comeca no centro
-    target_position = 0
-    target_position = 0
+
     reached = True
     ###################inicio do loop de visualizacao + sorteio ##################
 
@@ -30,24 +30,14 @@ def random_position(frame_size,step_size):
             break
 
         frame = imutils.resize(frame,width=frame_size)
+
         if reached == True:
         #chegou na posicao desejada, sortear novo alvo
             target_position_X = randint(0,width)
             target_position_Y = randint(0,height)
             reached = False
-        if(current_position_X > (target_position_X + step_size)):
-            current_position_X -= step_size
-        elif(current_position_X < (target_position_X - step_size)):
-            current_position_X += step_size
 
-        if(current_position_Y > (target_position_Y + step_size)):
-            current_position_Y -= step_size
-        elif(current_position_Y < (target_position_Y - step_size)):
-            current_position_Y += step_size
-
-        if LA.norm([current_position_X - target_position_X,current_position_Y - target_position_Y]) < 2*step_size:
-            reached = True
-
+        (reached,current_position_X,current_position_Y) = move_laser(current_position_X,current_position_Y,target_position_X,target_position_Y,step_size)
 
 
 
