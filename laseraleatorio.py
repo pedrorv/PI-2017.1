@@ -4,7 +4,7 @@ import imutils
 import time
 import cv2
 
-def track_cat(minimum_area,frame_size):
+def track_cat(minimum_area):
 #criando o programa e a recepcao de argumentos
 #se nao recebe video, vamo usar a webcam
     camera = cv2.VideoCapture(0)
@@ -27,7 +27,7 @@ def track_cat(minimum_area,frame_size):
         #fazer com que a imagem fique apenas preto e branco para facilitar a analise
         #a terceira operacao eh fazer com que a imagem fique mais borrada, para deixala mais suave
         #para que pequenas variacoes no quadro sejam diminuidas
-        frame = imutils.resize(frame,width=frame_size)
+        frame = imutils.resize(frame,width=500)
         #cv2.imshow("camera", frame)
         gray = cv2.cvtColor(frame,cv2.COLOR_BGR2GRAY)
         gray = cv2.GaussianBlur(gray,(21,21),0)  #por que aplicar um borrao gaussiano tira o ruido de alta frequencia?
