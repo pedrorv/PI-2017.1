@@ -9,7 +9,7 @@ def sendAngle():
     xAngle = randrange(0, 181, 1)
     print 'x', xAngle
     print 'y', yAngle
-    ser.write(str(yAngle + xAngle))
+    ser.write(str(yAngle + xAngle) + "x")
 
 while (1 == 1):
     sendAngle()
