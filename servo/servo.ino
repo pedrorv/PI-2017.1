@@ -9,16 +9,13 @@ void setup() {
   // put your setup code here, to run once:
   motorX.attach(X);
   motorY.attach(Y);
+  Serial.begin(9600);
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
-  motorX.write(45);
-  delay(1000);
-  motorX.write(125);
-  delay(1000);
-  motorY.write(0);
-  delay(1000);
-  motorY.write(50);
-  delay(1000);
+  Serial.print("X: ");
+  Serial.println(motorX.read());
+  Serial.print("Y: ");
+  Serial.println(motorY.read());
 }
