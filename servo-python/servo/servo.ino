@@ -33,8 +33,8 @@ void loop() {
   lcd.setCursor(0, 1);
   lcd.print(yAngle);
 
-  //motorX.write(xAngle);
-  //motorY.write(yAngle);
+  motorX.write(xAngle);
+  motorY.write(yAngle);
 
   delay(3000);
 }
