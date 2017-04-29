@@ -4,8 +4,11 @@ import cv2
 from numpy import linalg as LA
 from random import randint
 from move_laser import move_laser
+from move_laser import convert_to_stepper_coordinates
+from math import atan
 
 def random_position(frame_size,step_size):
+    
     camera = cv2.VideoCapture(0)
 
     ##################comeca lendo o quadro#################################
@@ -43,7 +46,7 @@ def random_position(frame_size,step_size):
 
         cv2.circle(frame,(current_position_X ,current_position_Y),2,(0,0,255),2)
         cv2.circle(frame,(target_position_X ,target_position_Y),2,(0,255,0),2)
-
+	(stepper_X,stepper_Y) = convert_to_stepper_coordinates(current_position_X,current_position_Y,frame_size,frame_size,atan(8.3/20))
 
         cv2.imshow("camera", frame)
 
@@ -55,3 +58,5 @@ def random_position(frame_size,step_size):
 
     camera.release()
     cv2.destroyAllWindows()
+
+

@@ -4,6 +4,8 @@ import imutils
 import time
 import cv2
 from move_laser import move_laser
+from move_laser import convert_to_stepper_coordinates
+from math import atan
 
 def track_cat(minimum_area,frame_size,step_size):
 #criando o programa e a recepcao de argumentos
@@ -70,6 +72,7 @@ def track_cat(minimum_area,frame_size,step_size):
                     target_position_X = x + w/2
                     target_position_Y = y - 20
                     (aux,current_position_X,current_position_Y) = move_laser(current_position_X,current_position_Y,target_position_X,target_position_Y,step_size)
+                    (stepper_X,stepper_Y) = convert_to_stepper_coordinates(current_position_X,current_position_Y,width,height,atan(8.3/20))
                     cv2.circle(frame,(current_position_X ,current_position_Y),2,(0,0,255),2)
 
         cv2.imshow("camera", frame)
