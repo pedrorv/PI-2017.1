@@ -15,7 +15,7 @@ ap.add_argument("-f","--frame_size",type=int,default=500,help="0->tracking mode 
 
 args=vars(ap.parse_args())
 
-SERIAL_PORT = serial.Serial('/dev/ttyUSB0', 9600)
+SERIAL_PORT = serial.Serial('/dev/ttyUSB0', 9600, timeout=1)
 
 if args["mode"] == 0:
 	track_cat(args["min_area"],args["frame_size"],5)
