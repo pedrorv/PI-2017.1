@@ -27,11 +27,11 @@ def convert_to_stepper_coordinates(x,y,max_X,max_Y,webcam_angle):
 
     if x < max_X/2:
         tg = (max_X/2 - x)/distance
-        stepper_X =  -1*atan(tg)
+        stepper_X =  atan(tg)
 
     else:
         tg = (x - max_X/2)/distance
-        stepper_X =  atan(tg)
+        stepper_X =  -1*atan(tg)
 
     if y < max_Y/2:
         tg = (max_Y/2 - y)/distance
