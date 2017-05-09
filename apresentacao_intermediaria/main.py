@@ -18,6 +18,6 @@ args=vars(ap.parse_args())
 SERIAL_PORT = serial.Serial('/dev/ttyUSB0', 9600, timeout=1)
 
 if args["mode"] == 0:
-	track_cat(args["min_area"],args["frame_size"],5)
+	track_cat(args["min_area"],args["frame_size"],5, SERIAL_PORT)
 elif args["mode"] == 1:
 	random_position(args["frame_size"],5, SERIAL_PORT)
