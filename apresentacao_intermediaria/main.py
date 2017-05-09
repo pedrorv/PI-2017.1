@@ -4,6 +4,7 @@ import imutils
 import time
 import cv2
 from cadeogato import track_cat
+from cadeogato2 import track_cat2
 from laseraleatorio import random_position
 import serial
 
@@ -21,3 +22,5 @@ if args["mode"] == 0:
 	track_cat(args["min_area"],args["frame_size"],5, SERIAL_PORT)
 elif args["mode"] == 1:
 	random_position(args["frame_size"],5, SERIAL_PORT)
+elif args["mode"] == 2:
+	track_cat2(args["min_area"],args["frame_size"],5, SERIAL_PORT)
