@@ -8,7 +8,7 @@ from move_laser import convert_to_stepper_coordinates
 from math import atan
 
 def random_position(frame_size,step_size):
-    
+
     camera = cv2.VideoCapture(0)
 
     ##################comeca lendo o quadro#################################
@@ -46,8 +46,12 @@ def random_position(frame_size,step_size):
 
         cv2.circle(frame,(current_position_X ,current_position_Y),2,(0,0,255),2)
         cv2.circle(frame,(target_position_X ,target_position_Y),2,(0,255,0),2)
-	(stepper_X,stepper_Y) = convert_to_stepper_coordinates(current_position_X,current_position_Y,frame_size,frame_size,atan(8.3/20))
-
+        (stepper_X,stepper_Y) = convert_to_stepper_coordinates(current_position_X,current_position_Y,width,height,atan(8.3/20))
+        #print (stepper_X,stepper_Y)
+        if (randint(0,100)%20 == 0):
+            print "objetivo",(target_position_X,target_position_Y)
+            print "posicao atual",(current_position_X,current_position_Y)
+            print "angulos stepper" , (stepper_X,stepper_Y)
         cv2.imshow("camera", frame)
 
 
@@ -58,5 +62,3 @@ def random_position(frame_size,step_size):
 
     camera.release()
     cv2.destroyAllWindows()
-
-
