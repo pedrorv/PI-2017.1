@@ -18,7 +18,7 @@ def track_cat2(minimum_area,frame_size,step_size,serial_port):
     (grabbed,frame) = camera.read()
     frame = imutils.resize(frame,width=frame_size)
     height, width, channels = frame.shape
-    rotational_speed = 6
+    rotational_speed = 10
     current_position_X = width/2 #laser comeca no centro
     current_position_Y = height/2 #laser comeca no centro
     #repete o seguinte loop para cada frame do video

@@ -10,7 +10,7 @@ import serial
 
 
 ap = argparse.ArgumentParser()
-ap.add_argument("-a","--min-area",type=int,default=900,help="minimum area size")
+ap.add_argument("-a","--min-area",type=int,default=600,help="minimum area size")
 ap.add_argument("-m","--mode",type=int,default=0,help="0->tracking mode \n 1->random mode")
 ap.add_argument("-f","--frame_size",type=int,default=500,help="0->tracking mode \n 1->random mode")
 

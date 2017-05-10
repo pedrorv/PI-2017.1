@@ -10,7 +10,7 @@ from send_angle import send_angle
 
 def random_position(frame_size,step_size, serial_port):
     
-    camera = cv2.VideoCapture(0)
+    camera = cv2.VideoCapture(1)
 
     ##################comeca lendo o quadro#################################
 
