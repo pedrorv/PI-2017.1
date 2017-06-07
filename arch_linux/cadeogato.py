@@ -8,6 +8,8 @@ from move_laser import convert_to_stepper_coordinates
 from math import atan
 from send_angle import send_angle
 
+from abertura import abertura
+
 def track_cat(minimum_area,frame_size,step_size, serial_port):
 #criando o programa e a recepcao de argumentos
 #se nao recebe video, vamo usar a webcam
@@ -51,10 +53,10 @@ def track_cat(minimum_area,frame_size,step_size, serial_port):
     #ja foi detectada o fundo estatico, sera feita a deteccao de movimento e tracking
 
         frameDelta = cv2.absdiff(gray,firstFrame) #model fundo - frame atual
-        thresh = cv2.threshold(frameDelta,40,255,cv2.THRESH_BINARY)[1] #essa linha descarta os pixels onde a diferenca com o fundo inicial seja muito pequena(menor do que 25)
+        thresh = cv2.threshold(frameDelta,10,255,cv2.THRESH_BINARY)[1] #essa linha descarta os pixels onde a diferenca com o fundo inicial seja muito pequena(menor do que 25)
 
     #dilata o limite da imagem pra tampar buracos e dps acha os contornos
-
+        
         thresh = cv2.dilate(thresh,None,iterations=2)
         (_,cnts,_) = cv2.findContours(thresh.copy(),cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE) #aqui temos cada contorno
 
@@ -73,7 +75,7 @@ def track_cat(minimum_area,frame_size,step_size, serial_port):
                     target_position_X = x + w/2
                     target_position_Y = y - 20
                     (aux,current_position_X,current_position_Y) = move_laser(current_position_X,current_position_Y,target_position_X,target_position_Y,step_size)
-                    (stepper_X,stepper_Y) = convert_to_stepper_coordinates(current_position_X,current_position_Y,width,height,atan(8.3/20))
+                    (stepper_X,stepper_Y) = convert_to_stepper_coordinates(current_position_X,current_position_Y,width,height,abertura)
                     send_angle(stepper_X, stepper_Y, serial_port)
                     cv2.circle(frame,(current_position_X ,current_position_Y),2,(0,0,255),2)
 

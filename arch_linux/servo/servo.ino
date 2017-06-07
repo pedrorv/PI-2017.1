@@ -37,5 +37,5 @@ void loop() {
   motorX.write(xAngle);
   motorY.write(yAngle);
 
-  delay(15);
+  delay(1);
 }
