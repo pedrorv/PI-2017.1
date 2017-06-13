@@ -53,7 +53,7 @@ def track_cat(minimum_area,frame_size,step_size, serial_port):
     #ja foi detectada o fundo estatico, sera feita a deteccao de movimento e tracking
 
         frameDelta = cv2.absdiff(gray,firstFrame) #model fundo - frame atual
-        thresh = cv2.threshold(frameDelta,10,255,cv2.THRESH_BINARY)[1] #essa linha descarta os pixels onde a diferenca com o fundo inicial seja muito pequena(menor do que 25)
+        thresh = cv2.threshold(frameDelta,50,255,cv2.THRESH_BINARY)[1] #essa linha descarta os pixels onde a diferenca com o fundo inicial seja muito pequena(menor do que 25)
 
     #dilata o limite da imagem pra tampar buracos e dps acha os contornos
         
@@ -68,7 +68,7 @@ def track_cat(minimum_area,frame_size,step_size, serial_port):
                     maiorArea = cv2.contourArea(c)
         for c in cnts:
             if cv2.contourArea(c) > minimum_area:
-                if cv2.contourArea(c) == maiorArea :
+                if cv2.contourArea(c) == maiorArea:
 
                     (x,y,w,h) = cv2.boundingRect(c)
                     cv2.rectangle(frame,(x,y),(x + w , y + h),(0,255,0),2)
