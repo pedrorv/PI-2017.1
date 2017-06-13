@@ -57,29 +57,30 @@ def track_cat(minimum_area,frame_size,step_size):
         thresh = cv2.dilate(thresh,None,iterations=2)
         (cnts,_) = cv2.findContours(thresh.copy(),cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE) #aqui temos cada contorno
 
-    #Loop para os contornos
+    #Loop para os contornos,  procura o maior retangulo que ta mexendo e "seleciona" ele
         maiorArea = 0
         for c in cnts:
             if cv2.contourArea(c) > minimum_area:
                 if cv2.contourArea(c) > maiorArea:
                     maiorArea = cv2.contourArea(c)
+       # vai fazer um retangulo em volta do maior objeto se mexendo 
         for c in cnts:
-            if cv2.contourArea(c) > minimum_area:
-                if cv2.contourArea(c) == maiorArea :
+     #       if cv2.contourArea(c) > minimum_area:
+             if cv2.contourArea(c) == maiorArea :
 
-                    (x,y,w,h) = cv2.boundingRect(c)
-                    cv2.rectangle(frame,(x,y),(x + w , y + h),(0,255,0),2)
-                    target_position_X = x + w/2
-                    target_position_Y = y - 20
-                    (aux,current_position_X,current_position_Y) = move_laser(current_position_X,current_position_Y,target_position_X,target_position_Y,step_size)
-                    (stepper_X,stepper_Y) = convert_to_stepper_coordinates(current_position_X,current_position_Y,width,height,atan(8.3/20))
-                    cv2.circle(frame,(current_position_X ,current_position_Y),2,(0,0,255),2)
+                (x,y,w,h) = cv2.boundingRect(c) #recebe as informacoes do retangulo a ser desenhado
+                cv2.rectangle(frame,(x,y),(x + w , y + h),(0,255,0),2) #desenha o retangulo no frame
+                target_position_X = x + w/2 #target position é onde o laser deveria estar, variavel criada para suavizar o movimento e controlar a velocidade
+                target_position_Y = y - 20
+                (aux,current_position_X,current_position_Y) = move_laser(current_position_X,current_position_Y,target_position_X,target_position_Y,step_size) #faz a current_position(onde o laser realmente esta) dar um "passo em direcao ao target_position
+                (stepper_X,stepper_Y) = convert_to_stepper_coordinates(current_position_X,current_position_Y,width,height,atan(8.3/20)) #converte as coordenadas em pixels na imagem para coordenadas em radianos para serem utilizadas pelo servo
+                cv2.circle(frame,(current_position_X ,current_position_Y),2,(0,0,255),2) #desenha uma circulo onde o laser esta na imagem
 
-        cv2.imshow("camera", frame)
-        cv2.imshow("diferencas", thresh)
+        cv2.imshow("camera", frame) #mostra o frame com o retangulo do gato e o circulo do laser
+        cv2.imshow("diferencas", thresh) #mostra a imagem de diferenças, onde ta tendo movimento na imagem
 
 
-        key = cv2.waitKey(1) & 0xFF # por que se nao tiver essa linha o programa nao funciona?????????
+        key = cv2.waitKey(1) & 0xFF 
         if key == ord("q"):
             break
 
