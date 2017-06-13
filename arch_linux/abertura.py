@@ -1,3 +1,3 @@
 from math import atan
 
-abertura = atan(5.35/13.3)
+abertura = atan(12.5/30.0)

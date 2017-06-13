@@ -5,7 +5,7 @@ from numpy import linalg as LA
 from random import randint
 from move_laser import move_laser
 from move_laser import convert_to_stepper_coordinates
-from math import atan
+from math import atan, degrees
 from send_angle import send_angle
 
 from abertura import abertura
@@ -49,15 +49,15 @@ def random_position(frame_size,step_size, serial_port):
 
         cv2.circle(frame,(current_position_X ,current_position_Y),2,(0,0,255),2)
         cv2.circle(frame,(target_position_X ,target_position_Y),2,(0,255,0),2)
-	(stepper_X,stepper_Y) = convert_to_stepper_coordinates(current_position_X,current_position_Y,frame_size,frame_size,abertura)
+	(stepper_X,stepper_Y) = convert_to_stepper_coordinates(current_position_X,current_position_Y,width,height,abertura)
     
+        print "x",stepper_X, "y",  stepper_Y
         send_angle(stepper_X, stepper_Y, serial_port)
 
 
         cv2.imshow("camera", frame)
 
-
-
+        time.sleep(0.015)
         key = cv2.waitKey(1) & 0xFF
         if key == ord("q"):
             break
