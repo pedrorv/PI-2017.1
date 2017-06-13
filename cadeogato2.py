@@ -64,21 +64,20 @@ def track_cat2(minimum_area,frame_size,step_size):
             if cv2.contourArea(c) > minimum_area:
                 if cv2.contourArea(c) > maiorArea:
                     maiorArea = cv2.contourArea(c)
-        for i in range(1):
-            for c in cnts:
-                if cv2.contourArea(c) > minimum_area:
-                    if cv2.contourArea(c) == maiorArea :
-
-                        (x,y,w,h) = cv2.boundingRect(c)
-                        cv2.rectangle(frame,(x,y),(x + w , y + h),(0,255,0),2)
-                        target_position_X = x + w/2 + (0.7*(sqrt(w*w + h*h)))*cos(radians(rotational_speed*a))
-                        target_position_Y = y + h/2 + (0.7*(sqrt(w*w + h*h)))*sin(radians(rotational_speed*a))
+     #   for i in range(1):
+         for c in cnts:
+            if cv2.contourArea(c) > minimum_area:
+                if cv2.contourArea(c) == maiorArea :
+                    (x,y,w,h) = cv2.boundingRect(c)
+                    cv2.rectangle(frame,(x,y),(x + w , y + h),(0,255,0),2)
+                    target_position_X = x + w/2 + (0.7*(sqrt(w*w + h*h)))*cos(radians(rotational_speed*a))
+                    target_position_Y = y + h/2 + (0.7*(sqrt(w*w + h*h)))*sin(radians(rotational_speed*a))
                     #    print "angulo:",rotational_speed*a
                     #    (aux,current_position_X,current_position_Y) = move_laser(current_position_X,current_position_Y,target_position_X,target_position_Y,1)
                     #    (stepper_X,stepper_Y) = convert_to_stepper_coordinates(current_position_X,current_position_Y,width,height,atan(8.3/20))
-                        (stepper_X,stepper_Y) = convert_to_stepper_coordinates(target_position_X,target_position_Y,width,height,atan(8.3/20))
+                    (stepper_X,stepper_Y) = convert_to_stepper_coordinates(target_position_X,target_position_Y,width,height,atan(8.3/20))
                     #    cv2.circle(frame,(current_position_X ,current_position_Y),2,(0,0,255),2)
-                        cv2.circle(frame,(int(target_position_X) ,int(target_position_Y)),2,(0,0,255),2)
+                    cv2.circle(frame,(int(target_position_X) ,int(target_position_Y)),2,(0,0,255),2)
                         #print(current_position_X,current_position_Y)
 
             cv2.imshow("camera", frame)
