@@ -2,7 +2,7 @@ from numpy import linalg as LA
 from math import atan
 from math import tan
 
-#da uma passo em direcao a posicao desejada
+#current_position da uma passo em direcao a posicao desejada (target_position), step_size é o tamanho do passo
 def move_laser(current_position_X,current_position_Y,target_position_X,target_position_Y,step_size):
   if(current_position_X > (target_position_X + step_size)):
       current_position_X -= step_size
