@@ -6,23 +6,19 @@ import cv2
 from move_laser import move_laser
 from move_laser import convert_to_stepper_coordinates
 from math import atan
-from centralizarlaser import centralizarlaser
 
-def track_cat(minimum_area,frame_size,step_size):
+def centralizarlaser(minimum_area,frame_size,step_size):
 #criando o programa e a recepcao de argumentos
 #se nao recebe video, vamo usar a webcam
     camera = cv2.VideoCapture(0)
     #time.sleep(0.25)
     firstFrame = None
-
+    initialTime = time.time()
     (grabbed,frame) = camera.read()
     frame = imutils.resize(frame,width=frame_size)
     height, width, channels = frame.shape
 
-    current_position_X = width/2 #laser comeca no centro
-    current_position_Y = height/2 #laser comeca no centro
     #repete o seguinte loop para cada frame do video
-    (offset_X,offset_Y) = centralizarlaser(minimum_area,frame_size,step_size)
 
     while True:
         #pega o frame atual e inicializa
@@ -72,19 +68,20 @@ def track_cat(minimum_area,frame_size,step_size):
 
                 (x,y,w,h) = cv2.boundingRect(c) #recebe as informacoes do retangulo a ser desenhado
                 cv2.rectangle(frame,(x,y),(x + w , y + h),(0,255,0),2) #desenha o retangulo no frame
-                target_position_X = x + w/2 #target position é onde o laser deveria estar, variavel criada para suavizar o movimento e controlar a velocidade
-                target_position_Y = y - 20
-                (aux,current_position_X,current_position_Y) = move_laser(current_position_X,current_position_Y,target_position_X,target_position_Y,step_size) #faz a current_position(onde o laser realmente esta) dar um "passo em direcao ao target_position
-                (stepper_X,stepper_Y) = convert_to_stepper_coordinates(current_position_X,current_position_Y,width,height,atan(8.3/20),offset_X,offset_Y) #converte as coordenadas em pixels na imagem para coordenadas em radianos para serem utilizadas pelo servo
-                cv2.circle(frame,(current_position_X ,current_position_Y),2,(0,0,255),2) #desenha uma circulo onde o laser esta na imagem
+                cv2.circle(frame,(x + w/2 ,y + h/2),2,(0,0,255),2) #desenha uma circulo onde o laser esta na imagem
+
 
         cv2.imshow("camera", frame) #mostra o frame com o retangulo do gato e o circulo do laser
         cv2.imshow("diferencas", thresh) #mostra a imagem de diferenças, onde ta tendo movimento na imagem
 
-
+        elapsed = initialTime - time.time()
+        if elapsed > 5
+            return (x + w/2,y + h/2)
         key = cv2.waitKey(1) & 0xFF
         if key == ord("q"):
             break
+
+
 
     camera.release()
     cv2.destroyAllWindows()
