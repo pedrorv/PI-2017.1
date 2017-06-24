@@ -6,18 +6,19 @@ Servo motorY;
 const int X = 10;
 const int Y = 9;
 const int servoDelay = 15;
-
-// LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
+const int laser = 11;
+int ligado = 0;
 
 void setup() {
   Serial.begin(9600);
+
+  pinMode(laser, OUTPUT);
+  pinMode(LED_BUILTIN, OUTPUT);
   
   motorX.write(93);
   motorY.write(75);
   motorX.attach(X);
   motorY.attach(Y);
-
-// lcd.begin(16, 2);
 }
 
 void loop() {
@@ -27,18 +28,19 @@ void loop() {
   int xAngle = xyAngles.toInt() % 1000;
   int yAngle = xyAngles.toInt() / 1000;
 
-  // lcd.setCursor(0, 0);
-  // lcd.print("   ");
-  // lcd.setCursor(0, 1);
-  // lcd.print("   ");
+  ligado = 1;
 
-  // lcd.setCursor(0, 0);
-  // lcd.print(xAngle);
-  // lcd.setCursor(0, 1);
-  // lcd.print(yAngle);
+  if (xAngle == 180) {
+    ligado = 1;
+  } else {    
+    motorX.write(xAngle);
+    motorY.write(yAngle);  
+  }
 
-  motorX.write(xAngle);
-  motorY.write(yAngle);
+  if (ligado == 1) {
+    digitalWrite(laser, HIGH);
+    digitalWrite(LED_BUILTIN, HIGH);
+  }
 
   delay(1);
 }

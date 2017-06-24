@@ -7,12 +7,15 @@ from move_laser import move_laser
 from move_laser import convert_to_stepper_coordinates
 from math import atan, sqrt, cos, sin, radians
 from send_angle import send_angle
+from centralizarlaser import centralizarlaser
 
 from abertura import abertura
 
 def track_cat(minimum_area,frame_size,step_size, serial_port):
 #criando o programa e a recepcao de argumentos
 #se nao recebe video, vamo usar a webcam
+    (offset_X,offset_Y) = centralizarlaser(minimum_area,frame_size,step_size,serial_port)
+
     camera = cv2.VideoCapture(1)
     #time.sleep(0.25)
     firstFrame = None
@@ -81,18 +84,19 @@ def track_cat(minimum_area,frame_size,step_size, serial_port):
                     target_position_X = x + w/2
                     target_position_Y = y - 20
                     (aux,current_position_X,current_position_Y) = move_laser(current_position_X,current_position_Y,target_position_X,target_position_Y,step_size)
-                    (stepper_X,stepper_Y) = convert_to_stepper_coordinates(current_position_X,current_position_Y,width,height,abertura)
+                    (stepper_X,stepper_Y) = convert_to_stepper_coordinates(current_position_X,current_position_Y,width,height,abertura,offset_X, offset_Y)
                     send_angle(stepper_X, stepper_Y, serial_port)
                     cv2.circle(frame,(current_position_X ,current_position_Y),2,(0,0,255),2)
         
-        # Tenta atrair o gato movimentando o laser em torno de um ponto caso não detecte nada na cena
+        # Tenta atrair o gato movimentando o laser em torno de um ponto caso nao detecte nada na cena
         if vazio:
             raio = 20
-            target_position_X = width/2  + raio + (0.7*(sqrt(2 * raio*raio)))*cos(radians(rotational_speed*a))
-            target_position_Y = height/2 + raio + (0.7*(sqrt(2 * raio*raio)))*sin(radians(rotational_speed*a))
-            (stepper_X,stepper_Y) = convert_to_stepper_coordinates(target_position_X,target_position_Y,width,height,abertura)
+            target_position_X = width/2  + (0.7*(sqrt(2 * raio*raio)))*cos(radians(rotational_speed*a))
+            target_position_Y = height/2 + (0.7*(sqrt(2 * raio*raio)))*sin(radians(rotational_speed*a))
+            (stepper_X,stepper_Y) = convert_to_stepper_coordinates(target_position_X,target_position_Y,width,height,abertura,offset_X, offset_Y)
             send_angle(stepper_X, stepper_Y, serial_port)
             cv2.circle(frame,(int(target_position_X) ,int(target_position_Y)),2,(0,0,255),2)
+            cv2.circle(frame,(int(width/2) ,int(height/2)),5,(0,0,255),2)
             
             
 

@@ -89,7 +89,7 @@ def track_cat2(minimum_area,frame_size,step_size,serial_port):
                         #print(current_position_X,current_position_Y)
 
         
-        # Tenta atrair o gato movimentando o laser em torno de um ponto caso não detecte nada na cena
+        # Tenta atrair o gato movimentando o laser em torno de um ponto caso nao detecte nada na cena
         if vazio:
             raio = 20
             target_position_X = width/2  + raio + (0.7*(sqrt(2 * raio*raio)))*cos(radians(rotational_speed*a))
