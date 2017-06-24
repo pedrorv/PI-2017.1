@@ -15,6 +15,7 @@ ap.add_argument("-f","--frame_size",type=int,default=500,help="0->tracking mode 
 
 args=vars(ap.parse_args())
 
+#aa
 if args["mode"] == 0:
 	track_cat(args["min_area"],args["frame_size"],5)
 elif args["mode"] == 1:
