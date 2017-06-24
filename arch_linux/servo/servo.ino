@@ -6,14 +6,13 @@ Servo motorY;
 const int X = 10;
 const int Y = 9;
 const int servoDelay = 15;
-const int laser = 11;
+const int laser = 3;
 int ligado = 0;
 
 void setup() {
   Serial.begin(9600);
 
   pinMode(laser, OUTPUT);
-  pinMode(LED_BUILTIN, OUTPUT);
   
   motorX.write(93);
   motorY.write(75);
@@ -28,19 +27,19 @@ void loop() {
   int xAngle = xyAngles.toInt() % 1000;
   int yAngle = xyAngles.toInt() / 1000;
 
-  ligado = 1;
-
   if (xAngle == 180) {
     ligado = 1;
-  } else {    
+  }
+  else if (xAngle == 181) {
+    ligado = 0;
+    digitalWrite(laser, LOW);
+  }
+  else {    
     motorX.write(xAngle);
     motorY.write(yAngle);  
   }
 
   if (ligado == 1) {
     digitalWrite(laser, HIGH);
-    digitalWrite(LED_BUILTIN, HIGH);
   }
-
-  delay(1);
 }
