@@ -11,6 +11,8 @@ from send_angle import send_angle
 from abertura import abertura
 
 def random_position(frame_size,step_size, serial_port):
+
+    (offset_X,offset_Y) = centralizarlaser(0,frame_size,step_size,serial_port)
     
     camera = cv2.VideoCapture(1)
 
@@ -49,19 +51,18 @@ def random_position(frame_size,step_size, serial_port):
 
         cv2.circle(frame,(current_position_X ,current_position_Y),2,(0,0,255),2)
         cv2.circle(frame,(target_position_X ,target_position_Y),2,(0,255,0),2)
-	(stepper_X,stepper_Y) = convert_to_stepper_coordinates(current_position_X,current_position_Y,width,height,abertura)
+	(stepper_X,stepper_Y) = convert_to_stepper_coordinates(current_position_X,current_position_Y,width,height,abertura,offset_X,offset_Y)
     
-        print "x",stepper_X, "y",  stepper_Y
         send_angle(stepper_X, stepper_Y, serial_port)
 
 
         cv2.imshow("camera", frame)
 
-        time.sleep(0.015)
         key = cv2.waitKey(1) & 0xFF
         if key == ord("q"):
             break
 
+    send_angle((181 - 93), 0, serial_port)
     camera.release()
     cv2.destroyAllWindows()
 

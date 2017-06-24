@@ -108,5 +108,6 @@ def track_cat(minimum_area,frame_size,step_size, serial_port):
         if key == ord("q"):
             break
 
+    send_angle((181 - 93), 0, serial_port)
     camera.release()
     cv2.destroyAllWindows()

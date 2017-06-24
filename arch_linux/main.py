@@ -19,9 +19,7 @@ step_size = 10
 
 args=vars(ap.parse_args())
 
-SERIAL_PORT = serial.Serial('/dev/ttyUSB0', 9600, timeout=1)
-
-send_angle(0, 0, SERIAL_PORT)
+SERIAL_PORT = serial.Serial('/dev/ttyUSB0', 9600, timeout=15)
 
 if args["mode"] == 0:
 	track_cat(args["min_area"],args["frame_size"],step_size, SERIAL_PORT)
