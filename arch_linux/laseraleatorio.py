@@ -7,6 +7,7 @@ from move_laser import move_laser
 from move_laser import convert_to_stepper_coordinates
 from math import atan, degrees
 from send_angle import send_angle
+from centralizarlaser import centralizarlaser
 
 from abertura import abertura
 

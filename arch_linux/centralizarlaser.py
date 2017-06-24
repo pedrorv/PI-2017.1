@@ -43,6 +43,7 @@ def centralizarlaser(minimum_area,frame_size,step_size,serial_port):
 
         if firstFrame is None:
             firstFrame = gray
+            time.sleep(1)
             send_angle((180 - 93), 0, serial_port)
             continue
 
@@ -77,7 +78,7 @@ def centralizarlaser(minimum_area,frame_size,step_size,serial_port):
         cv2.imshow("diferencas", thresh) #mostra a imagem de diferencas, onde ta tendo movimento na imagem
 
         elapsed = time.time() - initialTime
-        if elapsed > 3:
+        if elapsed > 4:
             camera.release()
             cv2.destroyAllWindows()
             print("Laser centralizado.");
