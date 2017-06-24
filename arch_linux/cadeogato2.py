@@ -62,6 +62,8 @@ def track_cat2(minimum_area,frame_size,step_size,serial_port):
         (_,cnts,_) = cv2.findContours(thresh.copy(),cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE) #aqui temos cada contorno
 
     #Loop para os contornos
+        vazio = True
+
         maiorArea = 0
         for c in cnts:
             if cv2.contourArea(c) > minimum_area:
@@ -71,6 +73,7 @@ def track_cat2(minimum_area,frame_size,step_size,serial_port):
             for c in cnts:
                 if cv2.contourArea(c) > minimum_area:
                     if cv2.contourArea(c) == maiorArea :
+                        vazio = False
 
                         (x,y,w,h) = cv2.boundingRect(c)
                         cv2.rectangle(frame,(x,y),(x + w , y + h),(0,255,0),2)
@@ -84,6 +87,16 @@ def track_cat2(minimum_area,frame_size,step_size,serial_port):
                     #    cv2.circle(frame,(current_position_X ,current_position_Y),2,(0,0,255),2)
                         cv2.circle(frame,(int(target_position_X) ,int(target_position_Y)),2,(0,0,255),2)
                         #print(current_position_X,current_position_Y)
+
+        
+        # Tenta atrair o gato movimentando o laser em torno de um ponto caso não detecte nada na cena
+        if vazio:
+            raio = 20
+            target_position_X = width/2  + raio + (0.7*(sqrt(2 * raio*raio)))*cos(radians(rotational_speed*a))
+            target_position_Y = height/2 + raio + (0.7*(sqrt(2 * raio*raio)))*sin(radians(rotational_speed*a))
+            (stepper_X,stepper_Y) = convert_to_stepper_coordinates(target_position_X,target_position_Y,width,height,abertura)
+            send_angle(stepper_X, stepper_Y, serial_port)
+            cv2.circle(frame,(int(target_position_X) ,int(target_position_Y)),2,(0,0,255),2)
 
             cv2.imshow("camera", frame)
             cv2.imshow("diferencas", thresh)

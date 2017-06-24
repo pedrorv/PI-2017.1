@@ -5,7 +5,7 @@ import time
 import cv2
 from move_laser import move_laser
 from move_laser import convert_to_stepper_coordinates
-from math import atan
+from math import atan, sqrt, cos, sin, radians
 from send_angle import send_angle
 
 from abertura import abertura
@@ -24,6 +24,8 @@ def track_cat(minimum_area,frame_size,step_size, serial_port):
     current_position_X = width/2 #laser comeca no centro
     current_position_Y = height/2 #laser comeca no centro
     #repete o seguinte loop para cada frame do video
+    a = 0
+    rotational_speed = 10
 
     while True:
         #pega o frame atual e inicializa
@@ -44,6 +46,7 @@ def track_cat(minimum_area,frame_size,step_size, serial_port):
         gray = cv2.GaussianBlur(gray,(21,21),0)  #por que aplicar um borrao gaussiano tira o ruido de alta frequencia?
         #cv2.imshow("camera", gray)
         #o primeiro frame sera usado para definir o fundo
+        a+=1
 
         if firstFrame is None:
             firstFrame = gray
@@ -62,6 +65,8 @@ def track_cat(minimum_area,frame_size,step_size, serial_port):
 
     #Loop para os contornos
         maiorArea = 0
+        vazio = True
+
         for c in cnts:
             if cv2.contourArea(c) > minimum_area:
                 if cv2.contourArea(c) > maiorArea:
@@ -69,6 +74,7 @@ def track_cat(minimum_area,frame_size,step_size, serial_port):
         for c in cnts:
             if cv2.contourArea(c) > minimum_area:
                 if cv2.contourArea(c) == maiorArea:
+                    vazio = False
 
                     (x,y,w,h) = cv2.boundingRect(c)
                     cv2.rectangle(frame,(x,y),(x + w , y + h),(0,255,0),2)
@@ -78,6 +84,17 @@ def track_cat(minimum_area,frame_size,step_size, serial_port):
                     (stepper_X,stepper_Y) = convert_to_stepper_coordinates(current_position_X,current_position_Y,width,height,abertura)
                     send_angle(stepper_X, stepper_Y, serial_port)
                     cv2.circle(frame,(current_position_X ,current_position_Y),2,(0,0,255),2)
+        
+        # Tenta atrair o gato movimentando o laser em torno de um ponto caso não detecte nada na cena
+        if vazio:
+            raio = 20
+            target_position_X = width/2  + raio + (0.7*(sqrt(2 * raio*raio)))*cos(radians(rotational_speed*a))
+            target_position_Y = height/2 + raio + (0.7*(sqrt(2 * raio*raio)))*sin(radians(rotational_speed*a))
+            (stepper_X,stepper_Y) = convert_to_stepper_coordinates(target_position_X,target_position_Y,width,height,abertura)
+            send_angle(stepper_X, stepper_Y, serial_port)
+            cv2.circle(frame,(int(target_position_X) ,int(target_position_Y)),2,(0,0,255),2)
+            
+            
 
         cv2.imshow("camera", frame)
         cv2.imshow("diferencas", thresh)
