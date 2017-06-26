@@ -101,8 +101,8 @@ def track_cat2(minimum_area,frame_size,step_size,serial_port):
             send_angle(stepper_X, stepper_Y, serial_port)
             cv2.circle(frame,(int(target_position_X) ,int(target_position_Y)),2,(0,0,255),2)
 
-            cv2.imshow("camera", frame)
-            cv2.imshow("diferencas", thresh)
+        cv2.imshow("camera", frame)
+        cv2.imshow("diferencas", thresh)
 
 
         key = cv2.waitKey(1) & 0xFF # por que se nao tiver essa linha o programa nao funciona?????????
