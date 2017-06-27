@@ -1,5 +1,4 @@
 #include "Servo.h"
-#include "LiquidCrystal.h"
 
 Servo motorX;
 Servo motorY;
@@ -34,6 +33,8 @@ void loop() {
     ligado = 0;
     digitalWrite(laser, LOW);
   }
+  else if (xAngle > 126 || xAngle < 60) {}
+  else if (yAngle > 95  || yAngle < 45) {}
   else {    
     motorX.write(xAngle);
     motorY.write(yAngle);  

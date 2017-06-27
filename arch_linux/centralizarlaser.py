@@ -43,8 +43,6 @@ def centralizarlaser(minimum_area,frame_size,step_size,serial_port):
 
         if firstFrame is None:
             firstFrame = gray
-            time.sleep(1)
-            send_angle((180 - 93), 0, serial_port)
             continue
 
 
@@ -59,6 +57,7 @@ def centralizarlaser(minimum_area,frame_size,step_size,serial_port):
         (_,cnts,_) = cv2.findContours(thresh.copy(),cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE) #aqui temos cada contorno
 
     #Loop para os contornos,  procura o maior retangulo que ta mexendo e "seleciona" ele
+        achouLaser = False
         maiorArea = 0
         for c in cnts:
             if cv2.contourArea(c) > 0:
@@ -68,6 +67,7 @@ def centralizarlaser(minimum_area,frame_size,step_size,serial_port):
         for c in cnts:
      #       if cv2.contourArea(c) > minimum_area:
              if cv2.contourArea(c) == maiorArea :
+                achouLaser = True
 
                 (x,y,w,h) = cv2.boundingRect(c) #recebe as informacoes do retangulo a ser desenhado
                 cv2.rectangle(frame,(x,y),(x + w , y + h),(0,255,0),2) #desenha o retangulo no frame
@@ -76,14 +76,22 @@ def centralizarlaser(minimum_area,frame_size,step_size,serial_port):
 
         cv2.imshow("camera", frame) #mostra o frame com o retangulo do gato e o circulo do laser
         cv2.imshow("diferencas", thresh) #mostra a imagem de diferencas, onde ta tendo movimento na imagem
+        send_angle((180 - 93), 0, serial_port)
+        
+        xPadrao = 215
+        yPadrao = 160
 
         elapsed = time.time() - initialTime
-        if elapsed > 4:
+        if elapsed > 3:
+            # if achouLaser:
+            #     xPadrao = x+w/2
+            #     yPadrao = y+h/2
+
             camera.release()
             cv2.destroyAllWindows()
-            print("Laser centralizado.");
-
-            return (x + w/2,y + h/2)
+            print("Laser centralizado.")
+            print("x:", xPadrao, "y:", yPadrao)
+            return (xPadrao, yPadrao)
         key = cv2.waitKey(1) & 0xFF
         if key == ord("q"):
             break

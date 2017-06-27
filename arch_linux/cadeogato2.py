@@ -80,8 +80,8 @@ def track_cat2(minimum_area,frame_size,step_size,serial_port):
 
                         (x,y,w,h) = cv2.boundingRect(c)
                         cv2.rectangle(frame,(x,y),(x + w , y + h),(0,255,0),2)
-                        target_position_X = x + w/2 + (0.7*(sqrt(w*w + h*h)))*cos(radians(rotational_speed*a))
-                        target_position_Y = y + h/2 + (0.7*(sqrt(w*w + h*h)))*sin(radians(rotational_speed*a))
+                        target_position_X = x + w/2 + (0.9*(sqrt(w*w + h*h)))*cos(radians(rotational_speed*a))
+                        target_position_Y = y + h/2 + (0.9*(sqrt(w*w + h*h)))*sin(radians(rotational_speed*a))
                     #    print "angulo:",rotational_speed*a
                     #    (aux,current_position_X,current_position_Y) = move_laser(current_position_X,current_position_Y,target_position_X,target_position_Y,1)
                     #    (stepper_X,stepper_Y) = convert_to_stepper_coordinates(current_position_X,current_position_Y,width,height,atan(8.3/20))
@@ -94,7 +94,7 @@ def track_cat2(minimum_area,frame_size,step_size,serial_port):
         
         # Tenta atrair o gato movimentando o laser em torno de um ponto caso nao detecte nada na cena
         if vazio:
-            raio = 20
+            raio = 30
             target_position_X = width/2  + (0.7*(sqrt(2 * raio*raio)))*cos(radians(rotational_speed*a))
             target_position_Y = height/2 + (0.7*(sqrt(2 * raio*raio)))*sin(radians(rotational_speed*a))
             (stepper_X,stepper_Y) = convert_to_stepper_coordinates(target_position_X,target_position_Y,width,height,abertura,offset_X,offset_Y)
